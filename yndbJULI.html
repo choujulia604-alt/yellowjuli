@@ -1,0 +1,1174 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101010">
+<title>JULI® — FULL SPEED</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --black:#101010;
+  --dark:#191919;
+  --yellow:#eaff00;
+  --white:#f5f5ef;
+  --grey:#a4a49a;
+  --line:#363626;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; scroll-padding-top:80px; }
+body {
+  background:var(--black);
+  color:var(--white);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+a { color:inherit; text-decoration:none; }
+button { font:inherit; cursor:pointer; }
+img { width:100%; display:block; }
+::selection { background:var(--yellow); color:var(--black); }
+.mono { font-family:"DM Mono",monospace; }
+.yellow { color:var(--yellow); }
+.condensed {
+  font-family:"Barlow Condensed",sans-serif;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:-.055em;
+}
+
+/* ===== BACKGROUND ===== */
+body::after {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:15;
+  opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+/* ===== FLOATING EMOJI ===== */
+#float-layer {
+  position:fixed;
+  inset:0;
+  z-index:18;
+  pointer-events:none;
+  overflow:hidden;
+}
+.floaty {
+  position:absolute;
+  bottom:-70px;
+  user-select:none;
+  will-change:transform,opacity;
+  animation:floatUp var(--dur,9s) linear forwards;
+  filter:drop-shadow(0 0 9px #eaff0044);
+}
+@keyframes floatUp {
+  0% { transform:translate(0,0) rotate(0) scale(.6); opacity:0; }
+  10% { opacity:.9; }
+  50% {
+    transform:translate(var(--drift,35px),-50vh) rotate(180deg) scale(1.1);
+    opacity:.85;
+  }
+  100% {
+    transform:translate(calc(var(--drift,35px)*-.5),-115vh) rotate(360deg) scale(.7);
+    opacity:0;
+  }
+}
+
+/* ===== CURSOR PARTICLES ===== */
+.cursor-particle {
+  position:fixed;
+  z-index:100;
+  pointer-events:none;
+  color:var(--yellow);
+  line-height:1;
+  animation:particleOut .8s ease-out forwards;
+  text-shadow:0 0 10px #eaff0088;
+}
+@keyframes particleOut {
+  0% { opacity:1; transform:translate(-50%,-50%) scale(.4) rotate(0); }
+  100% { opacity:0; transform:translate(var(--x),var(--y)) scale(1.5) rotate(120deg); }
+}
+.cursor-dot {
+  position:fixed;
+  z-index:99;
+  width:8px;
+  height:8px;
+  background:var(--yellow);
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:0 0 18px var(--yellow);
+  transform:translate(-50%,-50%);
+}
+
+/* ===== NAV ===== */
+.nav {
+  height:72px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:0 6%;
+  background:#101010ed;
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.logo {
+  font:900 36px/.9 "Barlow Condensed",sans-serif;
+  letter-spacing:-2px;
+}
+.logo span { color:var(--yellow); }
+.nav-links { display:flex; gap:22px; }
+.nav-links a {
+  font:10px "DM Mono",monospace;
+  color:#ccc;
+  transition:.2s;
+}
+.nav-links a:hover { color:var(--yellow); }
+.nav-number { color:var(--yellow); font:9px "DM Mono",monospace; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height:690px;
+  height:calc(100svh - 72px);
+  max-height:950px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  padding:55px 7%;
+  background:radial-gradient(ellipse at 78% 40%,#45431a,#202018 38%,#101010 75%);
+  isolation:isolate;
+}
+.hero-photo {
+  position:absolute;
+  inset:0;
+  height:100%;
+  object-fit:cover;
+  object-position:center 35%;
+  opacity:.58;
+  filter:saturate(.72) contrast(1.1);
+  animation:heroZoom 18s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform:scale(1); }
+  to { transform:scale(1.08); }
+}
+.hero-shade {
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,#101010 0%,#101010dc 28%,#10101055 78%),
+             linear-gradient(0deg,#101010 0%,transparent 45%,#10101055);
+}
+.hero-content {
+  position:relative;
+  z-index:4;
+  width:100%;
+  animation:heroIn 1s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes heroIn {
+  from { opacity:0; transform:translateY(35px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.eyebrow {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--yellow);
+  font:10px "DM Mono",monospace;
+  letter-spacing:2px;
+}
+.eyebrow::before {
+  content:"";
+  width:30px;
+  height:2px;
+  background:var(--yellow);
+}
+.hero h1 {
+  margin:34px 0 25px;
+  font:900 clamp(100px,19vw,250px)/.73 "Barlow Condensed",sans-serif;
+  letter-spacing:-.065em;
+  text-transform:uppercase;
+}
+.hero h1 span {
+  display:block;
+  margin-left:10%;
+  color:var(--yellow);
+  text-shadow:0 0 40px #eaff0020;
+}
+.hero-description {
+  max-width:340px;
+  font-size:13px;
+  line-height:1.9;
+  color:#d0d0c8;
+}
+.hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+.btn {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  padding:15px 21px;
+  background:var(--yellow);
+  color:var(--black);
+  border:1px solid var(--yellow);
+  font:700 10px "DM Mono",monospace;
+  transition:.25s;
+}
+.btn:hover {
+  background:transparent;
+  color:var(--yellow);
+  transform:translateY(-4px);
+  box-shadow:0 0 24px #eaff0024;
+}
+.btn-outline { background:transparent; color:var(--white); border-color:#666; }
+.btn-outline:hover { border-color:var(--yellow); }
+.hero-index {
+  position:absolute;
+  right:6%;
+  bottom:30px;
+  z-index:4;
+  text-align:right;
+  color:#ddd;
+  font:9px/2 "DM Mono",monospace;
+}
+.hero-index strong { color:var(--yellow); font-weight:400; }
+
+/* Hero stickers */
+.sticker {
+  position:absolute;
+  z-index:5;
+  user-select:none;
+  pointer-events:none;
+  filter:drop-shadow(0 0 12px #eaff003b);
+  animation:stickerBob 3.6s ease-in-out infinite;
+}
+.sticker-sun { top:12%; right:8%; font-size:clamp(32px,5vw,55px); }
+.sticker-heart { right:12%; bottom:18%; font-size:clamp(26px,4vw,43px); animation-delay:-1s; }
+.sticker-flower { left:3%; top:50%; font-size:clamp(28px,4vw,45px); animation-delay:-2s; }
+.sticker-ghost { right:25%; top:23%; font-size:clamp(25px,4vw,42px); animation-delay:-1.5s; }
+.sticker-pumpkin { left:8%; bottom:10%; font-size:clamp(28px,4vw,44px); animation-delay:-.7s; }
+@keyframes stickerBob {
+  0%,100% { transform:translateY(0) rotate(-8deg); }
+  50% { transform:translateY(-14px) rotate(9deg); }
+}
+
+/* ===== MARQUEE ===== */
+.marquee {
+  position:relative;
+  z-index:4;
+  overflow:hidden;
+  padding:14px 0;
+  background:var(--yellow);
+  color:var(--black);
+  white-space:nowrap;
+  transform:rotate(-1deg) scale(1.02);
+}
+.marquee-track {
+  display:flex;
+  width:max-content;
+  animation:marquee 23s linear infinite;
+}
+.marquee-track span {
+  padding-right:25px;
+  font:900 20px "Barlow Condensed",sans-serif;
+}
+@keyframes marquee { to { transform:translateX(-50%); } }
+
+/* ===== GENERAL SECTIONS ===== */
+.section { padding:100px 8%; scroll-margin-top:75px; }
+.section-top {
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:25px;
+  margin-bottom:45px;
+}
+.section-id {
+  color:var(--yellow);
+  font:10px "DM Mono",monospace;
+  letter-spacing:2px;
+  margin-bottom:16px;
+}
+.section-title {
+  font:900 clamp(60px,10vw,120px)/.82 "Barlow Condensed",sans-serif;
+  text-transform:uppercase;
+  letter-spacing:-.05em;
+}
+.section-title span { color:var(--yellow); }
+.section-note {
+  color:var(--grey);
+  text-align:right;
+  font:9px/2 "DM Mono",monospace;
+}
+.reveal { opacity:1; transform:none; }
+.js-motion .reveal {
+  opacity:0;
+  transform:translateY(25px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.js-motion .reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ===== ABOUT ===== */
+.about-layout {
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:60px;
+  align-items:start;
+}
+.about-statement {
+  font:900 clamp(40px,6vw,70px)/.95 "Barlow Condensed",sans-serif;
+  letter-spacing:-.03em;
+  text-transform:uppercase;
+}
+.about-statement span { color:var(--yellow); }
+.about-copy p {
+  color:#c6c6be;
+  font-size:13px;
+  line-height:2;
+  margin-bottom:18px;
+}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+  margin-top:30px;
+}
+.stat { padding:20px 10px 0 0; border-right:1px solid var(--line); }
+.stat + .stat { padding-left:15px; }
+.stat:last-child { border-right:0; }
+.stat strong {
+  display:block;
+  color:var(--yellow);
+  font:800 clamp(24px,3vw,36px) "Barlow Condensed",sans-serif;
+  margin-bottom:7px;
+}
+.stat span { color:var(--grey); font:8px "DM Mono",monospace; }
+
+/* ===== CLOCK ===== */
+.digital-clock {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  padding:20px;
+  margin-top:28px;
+  background:#171717;
+  border:1px solid var(--line);
+}
+.clock-time {
+  color:var(--yellow);
+  font:900 clamp(38px,7vw,65px)/1 "Barlow Condensed",sans-serif;
+  letter-spacing:2px;
+  font-variant-numeric:tabular-nums;
+}
+.clock-date { color:var(--grey); font:9px/2 "DM Mono",monospace; }
+
+/* ===== FEATURE PHOTO ===== */
+.feature { padding:0 5% 90px; }
+.feature-frame {
+  height:clamp(300px,56vw,650px);
+  position:relative;
+  overflow:hidden;
+  background:#25251c;
+}
+.feature-frame img {
+  height:100%;
+  object-fit:cover;
+  transition:transform .8s;
+}
+.feature-frame:hover img { transform:scale(1.04); }
+.feature-overlay {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:clamp(20px,5vw,55px);
+  background:linear-gradient(0deg,#000b,transparent 65%);
+  pointer-events:none;
+}
+.feature-overlay h2 {
+  font:900 clamp(45px,10vw,115px)/.82 "Barlow Condensed",sans-serif;
+  text-transform:uppercase;
+}
+.feature-overlay h2 span { color:var(--yellow); }
+.feature-overlay p { font:10px "DM Mono",monospace; }
+
+/* ===== MY WORLD ===== */
+.world-section { background:var(--yellow); color:var(--black); }
+.world-section .section-id { color:#555000; }
+.world-section .section-title span { color:#777000; }
+.world-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-top:1px solid #10101055;
+  border-left:1px solid #10101055;
+}
+.world-card {
+  min-height:220px;
+  padding:25px;
+  border-right:1px solid #10101055;
+  border-bottom:1px solid #10101055;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:.3s;
+}
+.world-card:hover { background:var(--black); color:var(--yellow); transform:translateY(-3px); }
+.world-card small { font:10px "DM Mono",monospace; }
+.world-card h3 {
+  margin:25px 0 12px;
+  font:900 clamp(38px,6vw,72px)/.85 "Barlow Condensed",sans-serif;
+  text-transform:uppercase;
+}
+.world-card p { max-width:270px; font-size:12px; line-height:1.8; }
+
+/* ===== GALLERY ===== */
+.gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.gallery-card { min-width:0; }
+.gallery-image {
+  position:relative;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  background:#24241c;
+}
+.gallery-image img {
+  height:100%;
+  object-fit:cover;
+  transition:transform .6s,filter .4s;
+  filter:saturate(.8);
+}
+.gallery-card:hover img { transform:scale(1.07); filter:saturate(1.15); }
+.gallery-number {
+  position:absolute;
+  top:12px;
+  left:12px;
+  padding:7px 10px;
+  background:var(--yellow);
+  color:var(--black);
+  font:10px "DM Mono",monospace;
+}
+.gallery-caption {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+  font-size:11px;
+}
+.gallery-caption span:last-child { color:var(--yellow); font:10px "DM Mono",monospace; }
+
+/* ===== BIRTHDAY ===== */
+.birthday {
+  position:relative;
+  overflow:hidden;
+  padding:clamp(28px,7vw,75px);
+  background:var(--dark);
+  border:1px solid #46451f;
+}
+.birthday::after {
+  content:"19";
+  position:absolute;
+  right:-15px;
+  bottom:-90px;
+  color:#eaff000c;
+  font:900 clamp(250px,45vw,500px)/1 "Barlow Condensed",sans-serif;
+  pointer-events:none;
+}
+.birthday h2 {
+  position:relative;
+  z-index:1;
+  margin:35px 0;
+  font:900 clamp(100px,20vw,220px)/.72 "Barlow Condensed",sans-serif;
+  letter-spacing:-.07em;
+}
+.birthday h2 span { color:var(--yellow); }
+.birthday > p:not(.section-id) {
+  position:relative;
+  z-index:1;
+  max-width:400px;
+  color:#c6c6be;
+  font-size:13px;
+  line-height:1.9;
+}
+.countdown-grid {
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  max-width:650px;
+  margin-top:30px;
+}
+.countdown-item {
+  padding:18px 8px;
+  text-align:center;
+  background:#ffffff08;
+  border:1px solid #eaff003b;
+}
+.countdown-number {
+  color:var(--yellow);
+  font:900 clamp(30px,6vw,55px)/1 "Barlow Condensed",sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+.countdown-label { margin-top:8px; color:#aaa; font:9px "DM Mono",monospace; }
+#birthdayMessage {
+  position:relative;
+  z-index:2;
+  margin-top:22px;
+  color:var(--yellow);
+  font:10px/1.8 "DM Mono",monospace;
+}
+
+/* ===== MUSIC ===== */
+.music-panel {
+  padding:25px;
+  background:var(--dark);
+  border:1px solid var(--line);
+}
+.music-intro {
+  max-width:520px;
+  color:var(--grey);
+  font-size:13px;
+  line-height:1.9;
+  margin-bottom:23px;
+}
+.spotify-frame {
+  width:100%;
+  overflow:hidden;
+  border-radius:12px;
+  background:#181818;
+  border:1px solid #333;
+}
+.spotify-frame iframe {
+  display:block;
+  width:100%;
+  height:152px;
+  border:0;
+}
+.music-bottom {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.music-bottom p { color:var(--grey); font:9px/2 "DM Mono",monospace; }
+.music-bottom a { color:var(--yellow); font:10px "DM Mono",monospace; }
+
+/* ===== SECRET MESSAGE ===== */
+.secret {
+  margin-top:28px;
+  padding:28px;
+  border:1px dashed #57572a;
+  background:#eaff0005;
+}
+.secret h3 {
+  margin:12px 0;
+  font:900 35px "Barlow Condensed",sans-serif;
+}
+.secret > p:not(.section-id) {
+  margin-bottom:18px;
+  color:var(--grey);
+  font-size:13px;
+  line-height:1.9;
+}
+#secretMessage {
+  display:none;
+  margin-top:20px;
+  color:var(--yellow);
+  line-height:2;
+  animation:heroIn .5s ease both;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:20px;
+  padding:32px 7%;
+  border-top:1px solid var(--line);
+}
+.footer p { color:var(--grey); font:9px/2 "DM Mono",monospace; }
+
+/* ===== MOBILE ===== */
+@media(max-width:700px) {
+  .nav { height:auto; min-height:65px; padding:13px 5%; gap:10px; }
+  .logo { font-size:29px; }
+  .nav-links { gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+  .nav-links a { font-size:8px; }
+  .nav-number { display:none; }
+  .hero { height:auto; min-height:690px; padding:75px 6%; }
+  .hero h1 { font-size:clamp(95px,22vw,155px); }
+  .hero-shade { background:linear-gradient(90deg,#101010e8,#10101070),linear-gradient(0deg,#101010,transparent 70%); }
+  .sticker-sun { top:7%; right:5%; }
+  .sticker-heart { right:5%; bottom:14%; }
+  .sticker-flower { left:2%; top:48%; }
+  .sticker-ghost { right:7%; top:27%; }
+  .sticker-pumpkin { left:4%; bottom:7%; }
+  .section { padding:75px 6%; }
+  .section-top { align-items:flex-start; flex-direction:column; margin-bottom:32px; }
+  .section-note { text-align:left; }
+  .about-layout { grid-template-columns:1fr; gap:30px; }
+  .feature { padding:0 3% 70px; }
+  .world-grid { grid-template-columns:1fr; }
+  .world-card { min-height:185px; }
+  .gallery-grid { gap:10px; }
+  .gallery-caption { font-size:9px; }
+  .countdown-grid { gap:5px; }
+  .countdown-item { padding:13px 3px; }
+  .countdown-label { font-size:7px; }
+  .music-panel { padding:14px; }
+}
+@media(max-width:380px) {
+  .nav-links { gap:7px; }
+  .nav-links a { font-size:7px; }
+  .hero h1 { font-size:90px; }
+  .countdown-number { font-size:27px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+/* FIX: JULI DRIVER PROFILE */
+#profile {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#profile h1,
+#profile h2,
+#profile h3,
+#profile .section-title,
+#profile .profile-title {
+  max-width: 100%;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
+}
+
+#profile p,
+#profile .profile-text {
+  max-width: 100%;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#profile .profile-content,
+#profile .profile-info,
+#profile .profile-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #profile h1,
+  #profile h2,
+  #profile h3,
+  #profile .section-title,
+  #profile .profile-title {
+    font-size: clamp(24px, 7vw, 44px);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  #profile p,
+  #profile .profile-text {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+}
+/* FIX DRIVER PROFILE TEXT OVERFLOW */
+#profile .driver-profile,
+#profile .profile-card,
+#profile .profile-figure,
+#profile .profile-content {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#profile .driver-profile *,
+#profile .profile-card *,
+#profile .profile-figure *,
+#profile .profile-content * {
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+#profile .driver-profile h1,
+#profile .driver-profile h2,
+#profile .profile-card h1,
+#profile .profile-card h2,
+#profile .profile-figure h1,
+#profile .profile-figure h2 {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+#profile .driver-profile p,
+#profile .profile-card p,
+#profile .profile-figure p,
+#profile .profile-content p {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  #profile .driver-profile h1,
+  #profile .driver-profile h2,
+  #profile .profile-card h1,
+  #profile .profile-card h2,
+  #profile .profile-figure h1,
+  #profile .profile-figure h2 {
+    font-size: clamp(18px, 5vw, 30px);
+    letter-spacing: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="float-layer"></div>
+
+<header class="nav">
+  <a class="logo" href="#home">JULI<span>®</span></a>
+  <nav class="nav-links">
+    <a href="#about">PROFILE</a>
+    <a href="#world">MY WORLD</a>
+    <a href="#archive">ARCHIVE</a>
+    <a href="#sound">SOUND</a>
+  </nav>
+  <span class="nav-number">NO. 019 / JUL</span>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <img class="hero-photo" src="hero.jpg" alt="Juli hero photo"
+       onerror="this.style.display='none'">
+  <div class="hero-shade"></div>
+
+  <span class="sticker sticker-sun">🌻</span>
+  <span class="sticker sticker-heart">💛</span>
+  <span class="sticker sticker-flower">🌼</span>
+  <span class="sticker sticker-ghost">👻</span>
+  <span class="sticker sticker-pumpkin">🎃</span>
+
+  <div class="hero-content">
+    <p class="eyebrow">PERSONAL PROJECT / EST. 19 JULY</p>
+    <h1>FULL<br><span>SPEED.</span></h1>
+    <p class="hero-description">
+      My life. My pace. My own universe.
+      Not here to follow the line. Here to make my own.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn" href="#about">DISCOVER JULI ↘</a>
+      <a class="btn btn-outline" href="#archive">THE ARCHIVE +</a>
+    </div>
+
+    <div class="digital-clock">
+      <div>
+        <div class="clock-time" id="digitalClock">00:00:00</div>
+        <div class="clock-date" id="digitalDate">LOADING DATE...</div>
+      </div>
+      <div class="mono yellow">JULI® / LIVE TIME</div>
+    </div>
+  </div>
+
+  <div class="hero-index">
+    <strong>DRIVER PROFILE / 019</strong><br>
+    BUILT DIFFERENT. STILL BECOMING.
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>JULI® ✳ FULL SPEED ✳ SUNFLOWER POWER ✳ YELLOW HEARTS ✳ OWN YOUR LANE ✳ </span>
+    <span>JULI® ✳ FULL SPEED ✳ SUNFLOWER POWER ✳ YELLOW HEARTS ✳ OWN YOUR LANE ✳ </span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-top reveal">
+    <div>
+      <p class="section-id">01 / DRIVER PROFILE</p>
+      <h2 class="section-title">MEET<br><span>THE DRIVER.</span></h2>
+    </div>
+    <p class="section-note">ONE PERSON.<br>A THOUSAND DIFFERENT SIDES.</p>
+  </div>
+
+  <div class="about-layout reveal">
+    <p class="about-statement">
+      NOT MADE TO<br>FIT IN.<br><span>MADE TO BE<br>MYSELF.</span>
+    </p>
+    <div class="about-copy">
+      <p>
+        Hi, I'm Juli. Welcome to my own little corner of the internet.
+        A place for my memories, favorite things, random thoughts,
+        and everything that makes my world feel like mine.
+      </p>
+      <p>
+        A little dark, a little chaotic, and always full of yellow.
+        I'm still figuring things out, chasing new dreams,
+        and enjoying every part of the journey.
+      </p>
+      <p>No final version. No perfect lap. Just me, at my own pace.</p>
+
+      <div class="stats">
+        <div class="stat"><strong>19.07</strong><span>BIRTHDAY</span></div>
+        <div class="stat"><strong>YELLOW</strong><span>RACE COLOR</span></div>
+        <div class="stat"><strong>∞</strong><span>NEXT CHAPTERS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE PHOTO -->
+<section class="feature reveal">
+  <div class="feature-frame">
+    <img src="feature.jpg" alt="Juli feature photo"
+         onerror="this.style.display='none'">
+    <div class="feature-overlay">
+      <p class="mono">JULI® / FRAME 001</p>
+      <h2>OWN<br><span>YOUR LANE.</span></h2>
+    </div>
+  </div>
+</section>
+
+<!-- MY WORLD -->
+<section class="section world-section" id="world">
+  <div class="section-top reveal">
+    <div>
+      <p class="section-id">02 / OFF TRACK</p>
+      <h2 class="section-title">OUTSIDE<br>THE <span>LINES.</span></h2>
+    </div>
+    <p class="section-note">LIFE IS MORE THAN<br>JUST THE FINISH LINE.</p>
+  </div>
+
+  <div class="world-grid reveal">
+    <article class="world-card">
+      <small>01 / THE AESTHETIC</small>
+      <div><h3>DARK<br>ENERGY.</h3><p>Black fits, neon details, and things with a little attitude.</p></div>
+    </article>
+    <article class="world-card">
+      <small>02 / THE PERSONALITY</small>
+      <div><h3>SOFT<br>CHAOS.</h3><p>A little unpredictable, still learning, always becoming.</p></div>
+    </article>
+    <article class="world-card">
+      <small>03 / THE SOUND</small>
+      <div><h3>PLAY IT<br>LOUD.</h3><p>Music for the mood, the memories, and every little moment.</p></div>
+    </article>
+    <article class="world-card">
+      <small>04 / THE FUTURE</small>
+      <div><h3>NOT<br>FINISHED.</h3><p>More places to see. More things to try. More stories ahead.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section" id="archive">
+  <div class="section-top reveal">
+    <div>
+      <p class="section-id">03 / PHOTO ARCHIVE</p>
+      <h2 class="section-title">LIFE IN<br><span>FRAMES.</span></h2>
+    </div>
+    <p class="section-note">REAL MOMENTS.<br>NO PARTICULAR ORDER.</p>
+  </div>
+
+  <div class="gallery-grid reveal">
+    <article class="gallery-card">
+      <div class="gallery-image">
+        <img src="foto1.jpg" alt="Juli photo 1" onerror="this.style.display='none'">
+        <span class="gallery-number">FRAME / 01</span>
+      </div>
+      <div class="gallery-caption"><span>THE MAIN CHARACTER</span><span>001</span></div>
+    </article>
+
+    <article class="gallery-card">
+      <div class="gallery-image">
+        <img src="foto2.jpg" alt="Juli photo 2" onerror="this.style.display='none'">
+        <span class="gallery-number">FRAME / 02</span>
+      </div>
+      <div class="gallery-caption"><span>RANDOM MEMORY</span><span>002</span></div>
+    </article>
+
+    <article class="gallery-card">
+      <div class="gallery-image">
+        <img src="foto3.jpg" alt="Juli photo 3" onerror="this.style.display='none'">
+        <span class="gallery-number">FRAME / 03</span>
+      </div>
+      <div class="gallery-caption"><span>OFF THE CLOCK</span><span>003</span></div>
+    </article>
+
+    <article class="gallery-card">
+      <div class="gallery-image">
+        <img src="foto4.jpg" alt="Juli photo 4" onerror="this.style.display='none'">
+        <span class="gallery-number">FRAME / 04</span>
+      </div>
+      <div class="gallery-caption"><span>JUST BECAUSE</span><span>004</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- BIRTHDAY COUNTDOWN -->
+<section class="section" id="birthday">
+  <div class="birthday reveal">
+    <p class="section-id">04 / ANNUAL CHECKPOINT</p>
+    <h2>JULY<br><span>19.</span></h2>
+    <p>
+      Another year. Another chapter. Keep growing, keep dreaming,
+      and enjoy the ride. Your story is still being written. 💛
+    </p>
+
+    <div class="countdown-grid">
+      <div class="countdown-item"><div class="countdown-number" id="cdDays">000</div><div class="countdown-label">DAYS</div></div>
+      <div class="countdown-item"><div class="countdown-number" id="cdHours">00</div><div class="countdown-label">HOURS</div></div>
+      <div class="countdown-item"><div class="countdown-number" id="cdMinutes">00</div><div class="countdown-label">MINUTES</div></div>
+      <div class="countdown-item"><div class="countdown-number" id="cdSeconds">00</div><div class="countdown-label">SECONDS</div></div>
+    </div>
+    <p id="birthdayMessage">COUNTING DOWN TO THE NEXT CHAPTER.</p>
+  </div>
+</section>
+
+<!-- SPOTIFY -->
+<section class="section" id="sound">
+  <div class="section-top reveal">
+    <div>
+      <p class="section-id">05 / PERSONAL SOUNDTRACK</p>
+      <h2 class="section-title">HIT<br><span>PLAY.</span></h2>
+    </div>
+    <p class="section-note">YOUR SONG.<br>YOUR MOMENT.</p>
+  </div>
+
+  <div class="music-panel reveal">
+    <p class="music-intro">
+      Every world needs a soundtrack. Here's your song.
+      Press play and let the music set the mood. 💛
+    </p>
+
+    <div class="spotify-frame">
+      <iframe
+        src="https://open.spotify.com/embed/track/6DvGOGRRjhURCE7weXWV3x?utm_source=generator&theme=0"
+        title="Juli's Spotify song"
+        loading="lazy"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="music-bottom">
+      <p>JULI® SOUND SYSTEM<br>NOW PLAYING: YOUR PICK</p>
+      <a href="https://open.spotify.com/track/6DvGOGRRjhURCE7weXWV3x?si=DX6zhETYRzCizDYEicQj9A&utm_source=copy-link" target="_blank" rel="noopener">OPEN IN SPOTIFY ↗</a>
+    </div>
+  </div>
+
+  <div class="secret reveal">
+    <p class="section-id">06 / PRIVATE TRANSMISSION</p>
+    <h3>A MESSAGE FOR JULI. 💛</h3>
+    <p>Some things are better kept close. But this little reminder deserves to be here.</p>
+    <button class="btn" id="secretBtn" type="button">UNLOCK MESSAGE ↗</button>
+    <p id="secretMessage">
+      Hey, Juli. You don't have to figure out your whole life today.
+      Take your time, enjoy the little things, and be proud of every step.
+      Your story is still being written. Keep going. 🌻💛
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div>
+    <div class="logo">JULI<span>®</span></div>
+    <p>PERSONAL ARCHIVE / MADE AT MY OWN PACE.</p>
+  </div>
+  <p>© JULI · 19 JULY<br>END OF PAGE. NOT THE STORY.</p>
+</footer>
+
+<script>
+/* ===== ENABLE SCROLL ANIMATIONS ===== */
+document.documentElement.classList.add('js-motion');
+
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.08 });
+
+  document.querySelectorAll('.reveal').forEach((el) => {
+    revealObserver.observe(el);
+  });
+} else {
+  document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+}
+
+/* ===== DIGITAL CLOCK: WIB ===== */
+function updateClock() {
+  const now = new Date();
+  const clock = document.getElementById('digitalClock');
+  const date = document.getElementById('digitalDate');
+
+  if (clock) {
+    clock.textContent = new Intl.DateTimeFormat('id-ID', {
+      timeZone:'Asia/Jakarta',
+      hour:'2-digit',
+      minute:'2-digit',
+      second:'2-digit',
+      hour12:false
+    }).format(now);
+  }
+
+  if (date) {
+    date.textContent = new Intl.DateTimeFormat('en-GB', {
+      timeZone:'Asia/Jakarta',
+      weekday:'long',
+      day:'2-digit',
+      month:'long',
+      year:'numeric'
+    }).format(now).toUpperCase();
+  }
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ===== COUNTDOWN TO JULY 19 ===== */
+function updateCountdown() {
+  const now = new Date();
+  const localNow = new Date(
+    now.toLocaleString('en-US', { timeZone:'Asia/Jakarta' })
+  );
+
+  let target = new Date(localNow.getFullYear(), 6, 19, 0, 0, 0);
+
+  if (localNow >= target) {
+    target = new Date(localNow.getFullYear() + 1, 6, 19, 0, 0, 0);
+  }
+
+  const diff = Math.max(0, target.getTime() - localNow.getTime());
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+
+  document.getElementById('cdDays').textContent = String(days).padStart(3, '0');
+  document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+  document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+  document.getElementById('birthdayMessage').textContent =
+    'NEXT CHECKPOINT: JULY 19, ' + target.getFullYear() + ' / KEEP GOING 💛';
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ===== FLOATING SUNFLOWERS, HEARTS, PUMPKINS & GHOSTS ===== */
+const floatLayer = document.getElementById('float-layer');
+const floatEmojis = [
+  '🌻','💛','💛','🌻','🎃','👻','🌼','✨','💛','👻',
+  '🌻','🎃','💛','⭐','🌼','👻','🌻','💛'
+];
+
+function makeFloaty() {
+  if (!floatLayer) return;
+
+  const el = document.createElement('span');
+  el.className = 'floaty';
+  el.textContent = floatEmojis[Math.floor(Math.random() * floatEmojis.length)];
+  el.style.left = Math.random() * 100 + '%';
+  el.style.fontSize = (17 + Math.random() * 24) + 'px';
+  el.style.setProperty('--dur', (7 + Math.random() * 8) + 's');
+  el.style.setProperty('--drift', (-70 + Math.random() * 140) + 'px');
+  floatLayer.appendChild(el);
+
+  el.addEventListener('animationend', () => el.remove());
+}
+
+/* Start with a few decorations, then keep spawning them */
+for (let i = 0; i < 12; i++) {
+  setTimeout(makeFloaty, i * 350);
+}
+setInterval(makeFloaty, 650);
+
+/* ===== CURSOR TRAIL ===== */
+const cursorEmojis = ['✨','💛','🌻','✦','⭐','💫'];
+let lastParticle = 0;
+
+document.addEventListener('pointermove', (event) => {
+  const now = performance.now();
+  if (now - lastParticle < 45) return;
+  lastParticle = now;
+
+  const particle = document.createElement('span');
+  particle.className = 'cursor-particle';
+  particle.textContent = cursorEmojis[
+    Math.floor(Math.random() * cursorEmojis.length)
+  ];
+  particle.style.left = event.clientX + 'px';
+  particle.style.top = event.clientY + 'px';
+  particle.style.fontSize = (10 + Math.random() * 12) + 'px';
+  particle.style.setProperty('--x', (-25 + Math.random() * 50) + 'px');
+  particle.style.setProperty('--y', (-25 + Math.random() * 50) + 'px');
+
+  document.body.appendChild(particle);
+  particle.addEventListener('animationend', () => particle.remove());
+});
+
+/* ===== SECRET MESSAGE BUTTON ===== */
+const secretBtn = document.getElementById('secretBtn');
+const secretMessage = document.getElementById('secretMessage');
+
+secretBtn.addEventListener('click', () => {
+  const opened = getComputedStyle(secretMessage).display !== 'none';
+  secretMessage.style.display = opened ? 'none' : 'block';
+  secretBtn.textContent = opened ? 'UNLOCK MESSAGE ↗' : 'CLOSE MESSAGE ↑';
+});
+
+/* ===== EXTRA CLICK SPARKLES ===== */
+document.addEventListener('click', (event) => {
+  for (let i = 0; i < 5; i++) {
+    const sparkle = document.createElement('span');
+    sparkle.className = 'cursor-particle';
+    sparkle.textContent = ['💛','✨','✦','🌼'][Math.floor(Math.random() * 4)];
+    sparkle.style.left = (event.clientX + Math.random() * 36 - 18) + 'px';
+    sparkle.style.top = (event.clientY + Math.random() * 36 - 18) + 'px';
+    sparkle.style.setProperty('--x', (-45 + Math.random() * 90) + 'px');
+    sparkle.style.setProperty('--y', (-45 + Math.random() * 90) + 'px');
+    document.body.appendChild(sparkle);
+    sparkle.addEventListener('animationend', () => sparkle.remove());
+  }
+});
+</script>
+
+</body>
+</html>
